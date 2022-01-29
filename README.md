@@ -10,7 +10,7 @@ sudo pip install requests
 ```bash
 sudo pip install os-sys
 ```
-``bash
+```bash
 cd bypass-403 && sudo chmod +x bypass-403.py
 ```
 
