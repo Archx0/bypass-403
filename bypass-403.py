@@ -1,14 +1,27 @@
+from dataclasses import replace
 import requests 
 import os
-
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    
 print("enter your url : ")
 url = input().replace(" ", "")
-lists = [      
+# url ="https://instafeed.nfcube.com/assets/img" #403
+# url = "https://www.w3schools.com/python/demopage.htm" # 200 
+lists = [
         'Referer',
         'X-Custom-IP-Authorization',
         'X-Forwarded-For',
         'X-rewrite-url',
-	      'X-Original-URL',
+	    'X-Original-URL',
         "X-Originating-IP",
         "X-Forwarded",
         "Forwarded-For",
@@ -24,7 +37,6 @@ lists = [
     ]
 ips = [
     "127.0.0.1",
-    "127.0.0.2",
     "http://127.0.0.1",
     "::ffff:7f00:0001",
     "http://::ffff:7f00:0001"
@@ -52,15 +64,15 @@ ips = [
     f"{url}",
     "/admin",
 ]    
-headerList=[
-    'get',
-    "post",
-    "head",
-    "options",
-    "put",
+MethodList = [
+    requests.get,
+    requests.post,
+    requests.options,
+    requests.head,
+    requests.put,
 ]
 
-useragents=[ 
+useragents = [ 
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
         # "Mozilla/5.0 (iPhone; CPU iPhone OS 12_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1",
         # "Mozilla/5.0 (Linux; U; Android 4.4.2; es-es; SM-T210R Build/KOT49H) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30",
@@ -71,7 +83,7 @@ useragents=[
 for list in lists:
     for ip in ips:
         for user in useragents:
-            for head in headerList:
+            for M in MethodList:
                 headers = {
                     "User-Agent":f"{user}",
                     "Accept":"*/*",
@@ -80,8 +92,18 @@ for list in lists:
                     "Content-Type": "application/x-www-form-urlencoded",
                     f"{list}":f"{ip}",
                     }
-                r = requests.head(url,headers=headers)
-
-                print(f"{r.status_code} {list}:{ip}")
-                if "403" != r.status_code:
+                r = M(url,headers=headers)
+                
+                print(bcolors.OKBLUE + f"Method : {r.request}  status : {r.status_code} \n header : {list}:{ip}" +bcolors.ENDC)
+                Allowed=[
+                    "Not Allowed",
+                    "403",
+                    "Forbidden",
+                    "403 Forbidden",
+                    "405", 
+                    "301", 
+                ]
+                if str(r.status_code) not in Allowed :
                     os.system(f'echo {r.text} ,{list}:{ip} > output.txt')
+                    print(bcolors.OKGREEN + f" Method : {r.request}  status : {r.status_code} \n header : {list}:{ip} \n {r.text} "+ bcolors.ENDC)
+                    break
