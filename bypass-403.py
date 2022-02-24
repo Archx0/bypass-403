@@ -26,7 +26,7 @@ lists = [
         'X-Custom-IP-Authorization',
         'X-Forwarded-For',
         'X-rewrite-url',
-	    'X-Original-URL',
+	'X-Original-URL',
         "X-Originating-IP",
         "X-Forwarded",
         "Forwarded-For",
@@ -110,7 +110,7 @@ for list in lists:
                     "301", 
                 ]
                 if  ("403 Forbidden" not in r.text and str(r.status_code) not in Allowed) :
-                    os.system(f'echo "================================================== Method : {method}  status : {r.status_code} \n ======> header : {list}:{ip}  \n ======> user-Agent:{user} \n \n {r.text} \n  ==================================================" >> output.txt')
+                    os.system(f'echo "================================================== \n Method : {method}  status : {r.status_code} \n ======> header : {list}:{ip}  \n ======> user-Agent:{user} \n \n {r.text} \n  ==================================================" >> output.txt')
                     print(bcolors.OKGREEN + f'================================================== Method : {method}  status : {r.status_code} \n ======> header : {list}:{ip}  \n ======> user-Agent:{user} \n \n {r.text} \n  ================================================== '+ bcolors.ENDC)
                     break
 
