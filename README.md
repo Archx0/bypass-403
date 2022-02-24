@@ -17,3 +17,5 @@ cd bypass-403 && sudo chmod +x bypass-403.py
 ```bash
 python3 bypass-403.py
 ```
+
+<img src="result" alt="resutl">
